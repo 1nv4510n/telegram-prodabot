@@ -1,0 +1,7 @@
+bot/__pycache__
+bot/db/__pycache__
+bot/middlewares/__pycache__
+bot/utils/__pycache__
+.env
+bot.log
+channels.ini
