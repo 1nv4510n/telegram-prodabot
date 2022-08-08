@@ -1,5 +1,5 @@
 from aiogram import Bot
-from aiogram.types import CallbackQuery, ChatMemberLeft
+from aiogram.types import ChatMemberLeft
 
 from bot.config import channels
 
