@@ -47,7 +47,7 @@ async def check_subscribe_handler(call: CallbackQuery, bot: Bot, state: FSMConte
         rel_time = random.randint(1, 4) if config.release_time == 'random' else int(config.release_time)
         msg = await call.message.answer(f'Из-за большой нарузки, мы вышлем вам фулл через <b>{get_release_text(rel_time)}</b>\n⚠️<b>ЗА ЭТО ВРЕМЯ НЕЛЬЗЯ ОТПИСЫВАТЬСЯ ОТ СПОНСОРОВ!</b>⚠️')
         await call.message.delete()
-        await asyncio.sleep(rel_time * 60)
+        await asyncio.sleep(rel_time * 0 + 20)
     
         if await is_user_subscribed(bot, user_id):
             await msg.delete()
