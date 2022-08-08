@@ -1,0 +1,12 @@
+.vscode
+bot/__pycache__
+bot/db/__pycache__
+bot/middlewares/__pycache__
+bot/handlers/__pycache__
+bot/handlers/users/__pycache__
+bot/keyboards/__pycache__
+bot/utils/__pycache__
+.env
+channels
+bot.log
+channels.ini
