@@ -12,14 +12,14 @@ from .db.base import Base
 from .middlewares import DbSessionMiddleware
 from .utils import log
 
-#from .handlers.users import default, search_game, chess, statistics, leaderboard
+from .handlers.users import default
 
 async def main():
     engine = create_async_engine(config.postgres_dsn, future=True, echo=False)
 
     db_pool = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
     
-    # FIRST LAUNCH
+    # # FIRST LAUNCH
     # async with engine.begin() as conn:
     #     await conn.run_sync(Base.metadata.create_all)
     
@@ -34,6 +34,8 @@ async def main():
     
     dp.message.middleware(DbSessionMiddleware(db_pool))
     dp.callback_query.middleware(DbSessionMiddleware(db_pool))
+    
+    dp.include_router(default.router)
 
     await set_commands(bot)
     
