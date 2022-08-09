@@ -11,7 +11,7 @@ from bot.config import config
 
 from bot.db.requests import *
 from bot.utils.helper import is_user_subscribed, get_release_text
-from bot.keyboards.keyboard import make_inline_keyboard, make_channels_keyboard
+from bot.keyboards.user_keyboard import make_inline_keyboard, make_channels_keyboard
 
 router = Router()
 
