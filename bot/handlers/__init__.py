@@ -2,7 +2,7 @@ from aiogram import Router
 
 from .users import default, user_block
 from .errors import error_handler
-from .admins import admin_menu, statistics
+from .admins import admin_menu
 
 router = Router()
 router.include_router(default.router)
