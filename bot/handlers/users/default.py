@@ -9,9 +9,9 @@ from bot.utils import log
 from bot.states import StatesList
 from bot.config import config
 
-from bot.db.requests import *
+from bot.db.requests import add_user, update_status
 from bot.utils.helper import is_user_subscribed, get_release_text
-from bot.keyboards.keyboard import make_inline_keyboard, make_channels_keyboard
+from bot.keyboards.user_keyboard import make_inline_keyboard, make_channels_keyboard
 
 router = Router()
 
@@ -28,7 +28,7 @@ async def start_handler(message: Message, state: FSMContext, session: AsyncSessi
             reply_markup=make_inline_keyboard('Получить продолжение🔞', 'start_callback')
         )
         log.info(f'User {message.from_user.first_name} started bot!')
-        
+
 @router.callback_query(StatesList.started, text='start_callback')
 async def subscribe_handler(call: CallbackQuery, state: FSMContext, session: AsyncSession) -> None:
     await state.set_state(StatesList.subscribe)

@@ -12,7 +12,7 @@ from .db.base import Base
 from .middlewares import DbSessionMiddleware
 from .utils import log
 
-from .handlers.users import default
+from . import handlers
 
 async def main():
     engine = create_async_engine(config.postgres_dsn, future=True, echo=False)
@@ -34,8 +34,9 @@ async def main():
     
     dp.message.middleware(DbSessionMiddleware(db_pool))
     dp.callback_query.middleware(DbSessionMiddleware(db_pool))
-    
-    dp.include_router(default.router)
+    dp.my_chat_member.middleware(DbSessionMiddleware(db_pool))
+
+    dp.include_router(handlers.router)
 
     await set_commands(bot)
     
