@@ -4,9 +4,14 @@ from aiogram.types import Message, CallbackQuery
 from bot.config import config
 from bot.filters.admin_filter import AdminFilter
 
+from .mass_mailing import router as mailing_router
+from .statistics import router as stats_router
+
 from bot.keyboards.admin_keyboard import make_admin_menu_keyboard
 
 router = Router()
+router.include_router(mailing_router)
+router.include_router(stats_router)
 router.message.filter(AdminFilter(admin_id=config.admin_id))
 router.callback_query.filter(AdminFilter(admin_id=config.admin_id))
 

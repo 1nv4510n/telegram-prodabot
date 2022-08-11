@@ -9,4 +9,4 @@ router = Router()
 @router.errors()
 async def forbidden_error_handler(update: TelegramObject, exception: Exception) -> None:
     if isinstance(exception, TelegramForbiddenError):
-        log.error(f'[{exception}] Send message error. Bot blocked by user.')
+        log.warning(f'[{exception}] Send default message error. Bot blocked by user.')

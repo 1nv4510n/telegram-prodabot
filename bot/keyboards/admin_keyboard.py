@@ -21,17 +21,28 @@ def make_statistics_keyboard() -> InlineKeyboardMarkup:
     keyboard.button(text='♻️ Сбросить подписки', callback_data='reset_subscribed')
     return keyboard.as_markup()
 
-def make_mailing_menu_keyboard(add_btn: bool = True) -> InlineKeyboardMarkup:
+def make_mailing_menu_keyboard() -> InlineKeyboardMarkup:
     keyboard = InlineKeyboardBuilder()
     keyboard.row(
         InlineKeyboardButton(text='📜 Изменить текст', callback_data='edit_text'),
         InlineKeyboardButton(text='📷 Изменить медиа', callback_data='edit_media')
     )
-    if add_btn:
-        keyboard.row(InlineKeyboardButton(text='▶️ Добавить кнопку', callback_data='add_button'))
-    else:
-        keyboard.row(InlineKeyboardButton(text='⏹️ Удалить кнопку', callback_data='delete_button'))
-    keyboard.row(InlineKeyboardButton(text='📢 Посмотреть пост', callback_data='preview_post'))
-    keyboard.row(InlineKeyboardButton(text='✈️ Начать рассылку', callback_data='start_mailing'))
+    keyboard.row(
+        InlineKeyboardButton(text='▶️ Добавить кнопку', callback_data='add_button'),
+        InlineKeyboardButton(text='⏹️ Удалить кнопки', callback_data='delete_button')
+    )
+    keyboard.row(
+        InlineKeyboardButton(text='📢 Посмотреть пост', callback_data='preview_post'),
+        InlineKeyboardButton(text='🗑️ Сбросить пост', callback_data='reset_post')
+    )
+    keyboard.row(InlineKeyboardButton(text='✈️ Начать рассылку', callback_data='start_mailing_menu'))
     keyboard.row(InlineKeyboardButton(text='⬅️ Назад', callback_data='back_menu'))
+    return keyboard.as_markup()
+
+def make_start_mailing_keyboard() -> InlineKeyboardMarkup:
+    keyboard = InlineKeyboardBuilder()
+    keyboard.row(
+        InlineKeyboardButton(text='⬅️ Назад', callback_data='back_mailing'),
+        InlineKeyboardButton(text='🆗 НАЧАТЬ', callback_data='start_mass_mailing')
+    )
     return keyboard.as_markup()

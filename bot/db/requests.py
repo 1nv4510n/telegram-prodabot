@@ -40,6 +40,13 @@ async def is_user_exists(session: AsyncSession, telegram_id: int) -> bool:
     )
     return request.scalars().first() is not None
 
+async def get_mailing_users(session: AsyncSession) -> List[UsersEntry]:
+    searching_data = await session.execute(
+        select(UsersEntry).where(UsersEntry.blocked == False)
+    )
+    
+    return searching_data.scalars().all()
+
 # modify data
 
 async def add_user(session: AsyncSession, telegram_id: int, name: str, status: str) -> None:

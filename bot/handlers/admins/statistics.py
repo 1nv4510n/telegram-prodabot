@@ -1,3 +1,4 @@
+from aiogram import Router
 from aiogram.types import CallbackQuery
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -5,11 +6,10 @@ from bot.utils.logging import log
 from bot.db.requests import get_users_count, get_blocked_users, get_subscribed_users, reset_subscribed_users
 from bot.keyboards.admin_keyboard import make_statistics_keyboard
 
-from .admin_menu import router
+router = Router()
 
 @router.callback_query(text='statistics')
 async def show_statistics_callback(call: CallbackQuery, session: AsyncSession) -> None:
-    print('asd')
     stats = {
         'total_users' : await get_users_count(session),
         'blocked_users' : await get_blocked_users(session),
