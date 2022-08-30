@@ -3,7 +3,7 @@ from typing import List
 from aiogram import Router, Bot
 from aiogram.types import Message, CallbackQuery, ContentType, InlineKeyboardButton
 import aiogram.exceptions as exceptions
-from aiogram.dispatcher.fsm.context import FSMContext
+from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from sqlalchemy.ext.asyncio import AsyncSession
 

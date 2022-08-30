@@ -1,6 +1,6 @@
 from typing import Union, List
 
-from aiogram.dispatcher.filters import BaseFilter
+from aiogram.filters import BaseFilter
 from aiogram.types import Message
 
 class AdminFilter(BaseFilter):

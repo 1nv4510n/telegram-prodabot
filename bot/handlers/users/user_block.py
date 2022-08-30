@@ -1,5 +1,5 @@
 from aiogram import Router, F
-from aiogram.dispatcher.filters.chat_member_updated import ChatMemberUpdatedFilter, MEMBER, KICKED
+from aiogram.filters.chat_member_updated import ChatMemberUpdatedFilter, MEMBER, KICKED
 from aiogram.types import ChatMemberUpdated
 from sqlalchemy.ext.asyncio import AsyncSession
 
