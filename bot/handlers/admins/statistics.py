@@ -1,5 +1,6 @@
 from aiogram import Router
 from aiogram.types import CallbackQuery
+from aiogram.filters import Text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot.utils.logging import log
@@ -8,7 +9,7 @@ from bot.keyboards.admin_keyboard import make_statistics_keyboard
 
 router = Router()
 
-@router.callback_query(text='statistics')
+@router.callback_query(Text('statistics'))
 async def show_statistics_callback(call: CallbackQuery, session: AsyncSession) -> None:
     stats = {
         'total_users' : await get_users_count(session),
@@ -40,7 +41,7 @@ async def show_statistics_callback(call: CallbackQuery, session: AsyncSession) -
     
     await call.message.edit_text(text=text, reply_markup=make_statistics_keyboard())
     
-@router.callback_query(text='reset_subscribed')
+@router.callback_query(Text('reset_subscribed'))
 async def reset_subscribed_callback(call: CallbackQuery, session: AsyncSession) -> None:
     try:
         await reset_subscribed_users(session)

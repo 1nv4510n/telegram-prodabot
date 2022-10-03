@@ -1,5 +1,6 @@
 from aiogram import Router
 from aiogram.types import Message, CallbackQuery
+from aiogram.filters import Command, Text
 
 from bot.config import config
 from bot.filters.admin_filter import AdminFilter
@@ -15,15 +16,15 @@ router.include_router(stats_router)
 router.message.filter(AdminFilter(admin_id=config.admin_id))
 router.callback_query.filter(AdminFilter(admin_id=config.admin_id))
 
-@router.message(commands=['admin'])
+@router.message(Command('admin'))
 async def admin_menu_handler(message: Message) -> None:
     await message.answer('Выберите действие', reply_markup=make_admin_menu_keyboard())
     
-@router.callback_query(text='exit_menu')
+@router.callback_query(Text('exit_menu'))
 async def exit_menu_callback(call: CallbackQuery) -> None:
     await call.answer(text='Успешно')
     await call.message.delete()
     
-@router.callback_query(text='back_menu')
+@router.callback_query(Text('back_menu'))
 async def back_menu_callback(call: CallbackQuery) -> None:
     await call.message.edit_text(text='Выберите действие', reply_markup=make_admin_menu_keyboard())
