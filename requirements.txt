@@ -1,4 +1,4 @@
-aiogram==3.0.0b3
+aiogram==3.0.0b5
 SQLAlchemy>=1.4.34
 environs>=9.5.0
 pydantic>=1.9.1
