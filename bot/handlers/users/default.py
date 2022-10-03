@@ -2,6 +2,7 @@ import asyncio
 import random
 from aiogram import Bot, Router, F
 from aiogram.types import Message, CallbackQuery
+from aiogram.filters import Command, Text
 from aiogram.fsm.context import FSMContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -15,7 +16,7 @@ from bot.keyboards.user_keyboard import make_inline_keyboard, make_channels_keyb
 
 router = Router()
 
-@router.message(commands=['start'])
+@router.message(Command('start'))
 async def start_handler(message: Message, state: FSMContext, session: AsyncSession) -> None:
     current_state = await state.get_state()
     if current_state == StatesList.waiting.state:
@@ -29,7 +30,7 @@ async def start_handler(message: Message, state: FSMContext, session: AsyncSessi
         )
         log.info(f'User {message.from_user.first_name} started bot!')
 
-@router.callback_query(StatesList.started, text='start_callback')
+@router.callback_query(StatesList.started, Text('start_callback'))
 async def subscribe_handler(call: CallbackQuery, state: FSMContext, session: AsyncSession) -> None:
     await state.set_state(StatesList.subscribe)
     await update_status(session, call.from_user.id, StatesList.subscribe._state)
@@ -37,7 +38,7 @@ async def subscribe_handler(call: CallbackQuery, state: FSMContext, session: Asy
     await call.message.delete()
     await msg.answer('Подписаться:', reply_markup=make_channels_keyboard())
 
-@router.callback_query(StatesList.subscribe, text='check_subscribe')
+@router.callback_query(StatesList.subscribe, Text('check_subscribe'))
 async def check_subscribe_handler(call: CallbackQuery, bot: Bot, state: FSMContext, session: AsyncSession) -> None:
     user_id = call.from_user.id
     if await is_user_subscribed(bot, user_id):

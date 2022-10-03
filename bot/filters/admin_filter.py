@@ -4,7 +4,9 @@ from aiogram.filters import BaseFilter
 from aiogram.types import Message
 
 class AdminFilter(BaseFilter):
-    admin_id: Union[int, List[int]]
+    def __init__(self, admin_id: Union[int, List[int]]) -> None:
+        super().__init__()
+        self.admin_id = admin_id
     
     async def __call__(self, message: Message) -> bool:
         if isinstance(self.admin_id, int):
