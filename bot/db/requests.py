@@ -1,6 +1,5 @@
 from typing import Dict, List, Optional
 from contextlib import suppress
-from urllib import request
 
 from sqlalchemy import select, update, desc, func
 from sqlalchemy.ext.asyncio import AsyncSession

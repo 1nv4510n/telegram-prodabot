@@ -2,7 +2,7 @@ import asyncio
 import random
 from aiogram import Bot, Router, F
 from aiogram.types import Message, CallbackQuery
-from aiogram.dispatcher.fsm.context import FSMContext
+from aiogram.fsm.context import FSMContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot.utils import log
