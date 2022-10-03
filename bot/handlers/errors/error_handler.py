@@ -1,5 +1,4 @@
 from aiogram import Router
-from aiogram.types import TelegramObject
 from bot.utils.logging import log
 
 from aiogram.exceptions import TelegramForbiddenError
