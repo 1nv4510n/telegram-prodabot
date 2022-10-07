@@ -1,10 +1,11 @@
 from typing import Optional
-from pydantic import BaseSettings, PostgresDsn, validator
+from pydantic import BaseSettings, PostgresDsn, validator, RedisDsn
 import configparser
 
 class Config(BaseSettings):
     bot_token: str
     bot_fsm_storage: str
+    redis_dsn: Optional[RedisDsn]
     postgres_dsn: PostgresDsn
     admin_id: int
     release_time: str
@@ -33,6 +34,12 @@ class Config(BaseSettings):
         if values["webhook_domain"] and not v:
             raise ValueError("Webhook path is missing!")
         return v
+    
+    @validator("redis_dsn")
+    def validate_redis_dsn(cls, v, values):
+        if values["bot_fsm_storage"] == "redis" and not v:
+            raise ValueError("Redis DSN string is missing!")
+        return 
 
     class Config:
         env_file = '.env'
