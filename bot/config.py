@@ -39,7 +39,7 @@ class Config(BaseSettings):
     def validate_redis_dsn(cls, v, values):
         if values["bot_fsm_storage"] == "redis" and not v:
             raise ValueError("Redis DSN string is missing!")
-        return 
+        return v
 
     class Config:
         env_file = '.env'
