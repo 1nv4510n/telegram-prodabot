@@ -1,12 +1,12 @@
 import logging
 import asyncio
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, F
 from aiogram.client.telegram import TelegramAPIServer
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.storage.redis import RedisStorage
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler
+
 from aiohttp import web
-from magic_filter import F
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
@@ -72,6 +72,7 @@ async def main():
             site = web.TCPSite(runner, host=config.app_host, port=config.app_port)
             await site.start()
             log.info('BOT STARTED')
+            
             # Running it forever
             await asyncio.Event().wait()
     finally:
