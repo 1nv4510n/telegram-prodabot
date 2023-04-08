@@ -46,12 +46,14 @@ async def subscribe_handler(call: CallbackQuery, state: FSMContext, session: Asy
 async def check_subscribe_handler(call: CallbackQuery, bot: Bot, state: FSMContext, session: AsyncSession) -> None:
     user_id = call.from_user.id
     if await is_user_subscribed(bot, user_id):
-        print('yes')
         await state.set_state(StatesList.waiting)
         await update_status(session, user_id, StatesList.waiting._state)
         await call.answer('Успешно!', show_alert=False)
         rel_time = random.randint(1, 4) if config.release_time == 'random' else int(config.release_time)
-        msg = await call.message.answer(f'<b>Попробуй нашего ChatGPT4 бота от Bing</b> @chatgpt4_megabot\n\nИз-за большой нарузки, мы вышлем вам фулл через <b>{get_release_text(rel_time)}</b>\n⚠️<b>ЗА ЭТО ВРЕМЯ НЕЛЬЗЯ ОТПИСЫВАТЬСЯ ОТ СПОНСОРОВ!</b>⚠️')
+        msg = await call.message.answer(
+            f'<b>Попробуй нашего ChatGPT4 бота от Bing</b> @chatgpt4_megabot\n\nИз-за большой нарузки, мы вышлем вам фулл через <b>{get_release_text(rel_time)}</b>\n⚠️<b>ЗА ЭТО ВРЕМЯ НЕЛЬЗЯ ОТПИСЫВАТЬСЯ ОТ СПОНСОРОВ!</b>⚠️',
+            reply_markup=make_chatgpt_keyboard()    
+        )
         await call.message.delete()
         await asyncio.sleep(rel_time * 60)
     
