@@ -20,7 +20,7 @@ from .utils import log
 from . import handlers
 
 async def main():
-    engine = create_async_engine(config.postgres_dsn, future=True, echo=False)
+    engine = create_async_engine(url=str(config.postgres_dsn), future=True, echo=False)
 
     db_pool = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
     

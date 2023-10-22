@@ -2,7 +2,6 @@ import asyncio
 from typing import List
 from aiogram import Router, Bot, F
 from aiogram.types import Message, CallbackQuery, ContentType, InlineKeyboardButton
-from aiogram.filters import Text
 import aiogram.exceptions as exceptions
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -16,7 +15,7 @@ from .mailing_states import MailingStates
 
 router = Router()
 
-@router.callback_query(Text('mailing_menu'))
+@router.callback_query(F.data == 'mailing_menu')
 async def mass_mailing_menu_callback(call: CallbackQuery, state: FSMContext) -> None:
     await state.set_state(MailingStates.mailing_state)
     await state.set_data(
@@ -30,19 +29,19 @@ async def mass_mailing_menu_callback(call: CallbackQuery, state: FSMContext) -> 
     
     await call.message.edit_text(text='Выберите действие', reply_markup=make_mailing_menu_keyboard())
     
-@router.callback_query(Text('back_mailing'))
+@router.callback_query(F.data == 'back_mailing')
 async def back_mailing_menu_callback(call: CallbackQuery, state: FSMContext) -> None:
     await state.set_state(MailingStates.mailing_state)
     await call.message.edit_text(text='Выберите действие', reply_markup=make_mailing_menu_keyboard())
     
-@router.message(MailingStates.edit_media, Text('Отмена'))
-@router.message(MailingStates.edit_text, Text('Отмена'))
-@router.message(MailingStates.edit_button, Text('Отмена'))
+@router.message(MailingStates.edit_media, F.text == 'Отмена')
+@router.message(MailingStates.edit_text, F.text == 'Отмена')
+@router.message(MailingStates.edit_button, F.text == 'Отмена')
 async def back_mailing_menu_callback(message: Message, state: FSMContext) -> None:
     await state.set_state(MailingStates.mailing_state)
     await message.answer(text='Выберите действие', reply_markup=make_mailing_menu_keyboard())
       
-@router.callback_query(MailingStates.mailing_state, Text('edit_text'))
+@router.callback_query(MailingStates.mailing_state, F.data == 'edit_text')
 async def edit_text_callback(call: CallbackQuery, state: FSMContext) -> None:
     await call.answer(text="Введите текст рассылки. Либо напишите 'Отмена'")
     await state.set_state(MailingStates.edit_text)
@@ -54,7 +53,7 @@ async def get_text_handler(message: Message, state: FSMContext) -> None:
     await state.set_state(MailingStates.mailing_state)
     await message.answer(text='<b>Успешно.</b>\nВыберите действие', reply_markup=make_mailing_menu_keyboard())
   
-@router.callback_query(MailingStates.mailing_state, Text('edit_media'))
+@router.callback_query(MailingStates.mailing_state, F.data == 'edit_media')
 async def edit_media_callback(call: CallbackQuery, state: FSMContext) -> None:
     await call.answer(text="Отправьте картинку/видео. Либо напишите 'Отмена'")
     await state.set_state(MailingStates.edit_media)
@@ -69,7 +68,7 @@ async def get_media_handler(message: Message, state: FSMContext) -> None:
     await state.set_state(MailingStates.mailing_state)
     await message.answer(text='<b>Успешно.</b>\nВыберите действие', reply_markup=make_mailing_menu_keyboard())
 
-@router.callback_query(MailingStates.mailing_state, Text('add_button'))
+@router.callback_query(MailingStates.mailing_state, F.data == 'add_button')
 async def add_button_callback(call: CallbackQuery, state: FSMContext) -> None:
     await state.set_state(MailingStates.edit_button)
     await call.answer("Введите название, после URL кнопки через пробел! Либо напишите 'Отмена'", show_alert=True)
@@ -96,7 +95,7 @@ async def edit_button_handler(message: Message, state: FSMContext) -> None:
         await message.answer(f"<b>Ошибка добавления кнопки</b>\nПроверьте заполнение, либо напишите 'Отмена'\nИсключение:\n {e}")
         log.error(f'Add button ERROR. Exception: {e}')
         
-@router.callback_query(MailingStates.mailing_state, Text('delete_button'))
+@router.callback_query(MailingStates.mailing_state, F.data == 'delete_button')
 async def delete_buttons_callback(call: CallbackQuery, state: FSMContext) -> None:
     try:
         await state.update_data(inline_markup=InlineKeyboardBuilder())
@@ -105,7 +104,7 @@ async def delete_buttons_callback(call: CallbackQuery, state: FSMContext) -> Non
         await call.message.answer(f'<b>Ошибка удаления кнопок! Исключение:\n{e}')
         log.error(f'Delete buttons ERROR. Exception: {e}')
         
-@router.callback_query(MailingStates.mailing_state, Text('reset_post'))
+@router.callback_query(MailingStates.mailing_state, F.data == 'reset_post')
 async def reset_post_callback(call: CallbackQuery, state: FSMContext) -> None:
     try:
         await state.set_data(
@@ -140,14 +139,14 @@ async def post_preview(call: CallbackQuery, data: dict) -> None:
             reply_markup=data['inline_markup'].as_markup()
         )
 
-@router.callback_query(MailingStates.mailing_state, Text('preview_post'))
+@router.callback_query(MailingStates.mailing_state, F.data == 'preview_post')
 async def preview_post_callback(call: CallbackQuery, state: FSMContext) -> None:
     current_data = await state.get_data()
     await post_preview(call, current_data)
     await call.message.answer(text='Выберите действие', reply_markup=make_mailing_menu_keyboard())
     await call.message.delete()
     
-@router.callback_query(MailingStates.mailing_state, Text('start_mailing_menu'))
+@router.callback_query(MailingStates.mailing_state, F.data == 'start_mailing_menu')
 async def start_mailing_menu_callback(call: CallbackQuery, state: FSMContext) -> None:
     current_data = await state.get_data()
     if current_data['text'] != 'Пример сообщения':
@@ -157,7 +156,7 @@ async def start_mailing_menu_callback(call: CallbackQuery, state: FSMContext) ->
     else:
         await call.answer(text='Для рассылки необходимо создать пост', show_alert=True)
         
-@router.callback_query(MailingStates.mailing_state, Text('start_mass_mailing'))
+@router.callback_query(MailingStates.mailing_state, F.data == 'start_mass_mailing')
 async def start_mass_mailing_callback(call: CallbackQuery, bot: Bot, state: FSMContext, session: AsyncSession) -> None:
     current_data = await state.get_data()
     spam_list: List[int] = [user.telegram_id for user in await get_mailing_users(session)]

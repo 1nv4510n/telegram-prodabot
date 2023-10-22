@@ -1,21 +1,22 @@
 from typing import Optional
-from pydantic import BaseSettings, PostgresDsn, validator, RedisDsn
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import PostgresDsn, validator, RedisDsn
 import configparser
 
 class Config(BaseSettings):
     bot_token: str
     bot_fsm_storage: str
-    redis_dsn: Optional[RedisDsn]
+    redis_dsn: Optional[RedisDsn] = None
     postgres_dsn: PostgresDsn
     admin_id: int
     release_time: str
     full_link: str
     channels_file: str
-    custom_bot_api: Optional[str]
+    custom_bot_api: Optional[str] = None
     app_host: Optional[str] = "0.0.0.0"
     app_port: Optional[int] = 9000
-    webhook_domain: Optional[str]
-    webhook_path: Optional[str]
+    webhook_domain: Optional[str] = None
+    webhook_path: Optional[str] = None
 
     @validator("bot_fsm_storage")
     def validate_bot_fsm_storage(cls, v):
@@ -41,10 +42,7 @@ class Config(BaseSettings):
             raise ValueError("Redis DSN string is missing!")
         return v
 
-    class Config:
-        env_file = '.env'
-        env_file_encoding = 'utf-8'
-        env_nested_delimiter = '__'
+    model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8', env_nested_delimiter='__')
 
 config = Config()
 
